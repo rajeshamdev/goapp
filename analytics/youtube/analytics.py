@@ -1,25 +1,63 @@
 import os
+import sys
 import json
 import pprint as pretty
 import googleapiclient.discovery
-
-## TBD(Raj) : Fix this
-#  import ssl
-#  ssl._create_default_https_context = ssl._create_unverified_context
-
 import nltk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-# TBD (Raj): Download only once
-#nltk.download('vader_lexicon')
+
+## TBD (Raj):Investigate why ssl fails.
+# import ssl
+# ssl._create_default_https_context = ssl._create_unverified_context
+
+"""
+One time setup:
+
+ pip3 install google-api-python-client
+ pip3 install nlkt
+ nltk.download('vader_lexicon') if SentimentIntensityAnalyzer() is used
+
+ pip3 install textblob if TextBlob() is used
+ nltk.download('punkt')
+ nltk.download('averaged_perceptron_tagger')
+ nltk.download('wordnet')
+ nltk.download('brown')
+"""
 
 class YoutubeChannel:
 
     def __init__(self, id):
         self.channelID = id
-        self.APIKEY = <>
+        self.APIKEY = self.readAPIKey()
         self.youtubeResource =  googleapiclient.discovery.build('youtube',
             'v3', developerKey=self.APIKEY)
         self.sid = SentimentIntensityAnalyzer()
+
+    def readAPIKey(self):
+        """
+        read API key from .config in root of this repo or from env variable
+
+        Args:
+            None
+
+        Returns:
+            string: GCP API key
+        """
+        APIKeyConfig = None
+        APIKeyEnv = None
+
+        with open ("../../.config", 'r') as f:
+            config = json.load(f)
+
+        APIKeyConfig = config.get("GCP_APIKEY")
+        APIKeyEnv = os.environ.get("GCP_APIKEY")
+
+        self.APIKEY = APIKeyEnv if APIKeyEnv else APIKeyConfig
+        if self.APIKEY is None:
+            print("error: GCP_APIKEY variable not set in ../../.config or in env")
+            sys.exit(1)
+
+        return self.APIKEY
 
     def formatNumber(self, num: int) -> str:
         magnitude = 0
@@ -217,11 +255,8 @@ if __name__ == '__main__':
     yt = YoutubeChannel(channelID)
     yt.channelSummary()
     yt.videoSummary(51)
-
     videoID = 'vrOttI2cgAM'
     sentimentResults = yt.analyzeSentiment(videoID)
     for idx, (comment, sentiment) in enumerate(sentimentResults, start=1):
         print(f'Comment {idx}: {comment}')
         print(f'Sentiment: {sentiment}')
-        print('---')
-    
