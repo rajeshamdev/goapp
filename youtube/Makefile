@@ -3,7 +3,7 @@ GO = go
 GOBUILD = $(GO) build
 GOTEST  = $(GO) test
 GOCLEAN = $(GO) clean
-APP = ytinsights
+APP = server
 
 DEBUGFLAGS = -race -gcflags="-m -l"
 
