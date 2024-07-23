@@ -3,6 +3,7 @@ package utube
 import (
 	"errors"
 	"fmt"
+	"math"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -246,4 +247,18 @@ func VideoSentiment(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, sentiments)
+}
+
+func formatNumber(num float64) string {
+	magnitude := 0
+	for math.Abs(num) >= 1000 {
+		magnitude++
+		num /= 1000.0
+	}
+
+	if magnitude == 0 {
+		return fmt.Sprintf("%.0f", num)
+	} else {
+		return fmt.Sprintf("%.2f%s", num, []string{"", "K", "M", "B", "T"}[magnitude])
+	}
 }

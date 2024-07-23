@@ -11,6 +11,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/rajeshamdev/analytics/youtube/utube"
 	"google.golang.org/api/option"
@@ -25,6 +26,17 @@ var (
 	apiKey                        string
 	HTTPServerShutdownWaitSeconds int
 )
+
+func corsMiddleware() gin.HandlerFunc {
+	// CORS middleware configuration
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:3000"} // Replace with your frontend URL
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	config.AllowHeaders = []string{"Origin", "Content-Type"}
+
+	// Create middleware handler
+	return cors.New(config)
+}
 
 func serverInit() {
 
@@ -41,6 +53,9 @@ func serverInit() {
 
 	ginRouter := gin.Default()
 	ginRouter.Use(gin.Logger())
+	// Apply CORS middleware
+	ginRouter.Use(corsMiddleware())
+
 	ginRouter.GET("/v1/api/channel/:id/insights", utube.GetChannelInsights)
 	ginRouter.GET("/v1/api/channel/:id/videos", utube.GetChannelVideos)
 	ginRouter.GET("/v1/api/video/:id/insights", utube.GetVideoInsights)

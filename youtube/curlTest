@@ -2,3 +2,13 @@ curl -X GET localhost:8080/v1/api/channel/UCZN6X0ldwi-2W4TV-ab5M_g/insights | py
 curl -X GET localhost:8080/v1/api/channel/UCZN6X0ldwi-2W4TV-ab5M_g/videos | python3 -m json.tool
 curl -X GET localhost:8080/v1/api/video/vrOttI2cgAM/insights | python3 -m json.tool
 curl -X GET localhost:8080/v1/api/video/vrOttI2cgAM/sentiments | python3 -m json.tool
+
+1) Money Purse Channel id: UChBT5TlUeG68PKvJSg6MkqQ
+2) Akshat Shrivastava: UCqW8jxh4tH1Z1sWPbkGWL4g
+3) Thulasi Chandu: UCZN6X0ldwi-2W4TV-ab5M_g
+4) Sahil Bhadviya: UCdc6ObxhdQ8eZIFquU2xolA
+5) Moneyvest: UCf3g0uNBn6wPpgrTK_AbJrQ
+6) First Post: UCz8QaiQxApLq8sLNcszYyJw
+
+
+settting up react-app: npx npx create-react-app react-app
