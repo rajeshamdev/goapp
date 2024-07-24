@@ -12,3 +12,7 @@ curl -X GET localhost:8080/v1/api/video/vrOttI2cgAM/sentiments | python3 -m json
 
 
 settting up react-app: npx npx create-react-app react-app
+
+docker build -t my-node-app
+
+docker run -p 3000:3000 my-node-app
