@@ -11,7 +11,7 @@ DEBUGBUILD = $(GO) build -mod vendor $(DEBUGFLAGS)
 
 .PHONY: all build test clean
 
-all: test build
+all: test build linux
 
 build:
 	$(GOBUILD) -o $(APP) main.go
@@ -26,4 +26,4 @@ test:
 	$(GOTEST) -v ./...
 
 clean:
-	rm $(APP)
+	rm $(APP) $(APPLINUX)

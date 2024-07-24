@@ -108,12 +108,11 @@ type Config struct {
 	APIKey string `json:"GCP_APIKEY"`
 }
 
-func readConfig() {
+func readConfig() (*Config, error) {
 
 	file, err := os.Open("./.config")
 	if err != nil {
-		fmt.Printf("Error opening config file: %v\n", err)
-		os.Exit(1)
+		return nil, err
 	}
 	defer file.Close()
 
@@ -122,16 +121,23 @@ func readConfig() {
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&config)
 	if err != nil {
-		fmt.Printf("Error decoding config file: %v\n", err)
-		os.Exit(1)
+		return nil, err
 	}
-
-	apiKey = config.APIKey
+	return &config, nil
 }
 
 func main() {
 
-	readConfig()
+	// pass GCP_APIKEY as env variable or in .config file in cwd
+	apiKey = os.Getenv("GCP_APIKEY")
+	if apiKey == "" {
+		conf, err := readConfig()
+		if err != nil || conf.APIKey == "" {
+			fmt.Printf("pass GCP_APIKEY as env variable or set in .config\n")
+			os.Exit(1)
+		}
+		apiKey = conf.APIKey
+	}
 
 	ctx := context.Background()
 	var err error

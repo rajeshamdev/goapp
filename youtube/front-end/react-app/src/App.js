@@ -14,7 +14,8 @@ function App() {
       const response = await fetch(`http://localhost:8080/v1/api/channel/${encodeURIComponent(id)}/insights`);
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const errorMessage = await response.json()
+        throw new Error(errorMessage.message)
       }
 
       const data = await response.json();
@@ -22,7 +23,7 @@ function App() {
       setError('');
     } catch (error) {
       console.error('Error:', error);
-      setError('Error fetching channel insights');
+      setError(`${error.message}`);
       setChannelInsights(null);
     }
   };
@@ -32,7 +33,8 @@ function App() {
       const response = await fetch(`http://localhost:8080/v1/api/video/${encodeURIComponent(id)}/insights`);
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const errorMessage = await response.json()
+        throw new Error(errorMessage.message)
       }
 
       const data = await response.json();
@@ -40,7 +42,7 @@ function App() {
       setError('');
     } catch (error) {
       console.error('Error:', error);
-      setError('Error fetching video insights');
+      setError(`${error.message}`);
       setVideoInsights(null);
     }
   };
@@ -50,7 +52,8 @@ function App() {
       const response = await fetch(`http://localhost:8080/v1/api/video/${encodeURIComponent(id)}/sentiments`);
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const errorMessage = await response.json()
+        throw new Error(errorMessage.message)
       }
 
       const data = await response.json();
@@ -58,7 +61,7 @@ function App() {
       setError('');
     } catch (error) {
       console.error('Error:', error);
-      setError('Error fetching video sentiments');
+      setError(`${error.message}`);
       setVideoSentiments(null);
     }
   };
