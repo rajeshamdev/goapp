@@ -109,7 +109,6 @@ func GetVideoInsights(c *gin.Context) {
 
 	videoID := c.Param("id")
 	vm, retCode, err := getVideoInsights((videoID))
-	fmt.Printf("DEBUG1: %v\n", err)
 	if err != nil {
 		errMsg := fmt.Sprintf("%v", err)
 		c.JSON(retCode, gin.H{"message": errMsg})
@@ -135,7 +134,6 @@ func getVideoInsights(videoID string) (*VideoMetrics, int, error) {
 
 	videoListApiCall := YoutubeService.Videos.List([]string{"snippet,statistics"}).Id(videoID)
 	resp, err := videoListApiCall.Do()
-	fmt.Printf("DEBUG: %v\n", err)
 	if err != nil {
 		code := http.StatusInternalServerError
 		if apiErr, ok := err.(*googleapi.Error); ok {
@@ -147,11 +145,9 @@ func getVideoInsights(videoID string) (*VideoMetrics, int, error) {
 	// Check if there are any videos matching the request
 	if len(resp.Items) == 0 || resp.Items[0] == nil {
 		errMsg := fmt.Sprintf("video id: %v not found", videoID)
-		fmt.Printf("DEBUG5: %v\n", errMsg)
 		return nil, http.StatusNotFound, errors.New(errMsg)
 	}
 
-	fmt.Printf("DEBUG2: %v\n", resp.Items[0])
 	video := resp.Items[0]
 	var vm VideoMetrics
 

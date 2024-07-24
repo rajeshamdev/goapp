@@ -4,8 +4,6 @@ FROM alpine:latest
 # Set the working directory to /app in the second stage
 WORKDIR /app
 
-COPY .config /app/.config
-
 # Copy the binary from the build stage to the second stage
 COPY server-linux /app
 
