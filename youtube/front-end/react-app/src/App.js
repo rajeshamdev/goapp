@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
+import config from './config'
+
+const backendURL = config.backendURL;
 
 function App() {
   const [channelId, setChannelId] = useState('');
@@ -11,7 +14,7 @@ function App() {
 
   const fetchChannelInsights = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8080/v1/api/channel/${encodeURIComponent(id)}/insights`);
+      const response = await fetch(`${backendURL}/v1/api/channel/${encodeURIComponent(id)}/insights`);
 
       if (!response.ok) {
         const errorMessage = await response.json()
@@ -30,7 +33,7 @@ function App() {
 
   const fetchVideoInsights = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8080/v1/api/video/${encodeURIComponent(id)}/insights`);
+      const response = await fetch(`${backendURL}/v1/api/video/${encodeURIComponent(id)}/insights`);
 
       if (!response.ok) {
         const errorMessage = await response.json()
@@ -49,7 +52,7 @@ function App() {
 
   const fetchVideoSentiments = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8080/v1/api/video/${encodeURIComponent(id)}/sentiments`);
+      const response = await fetch(`${backendURL}/v1/api/video/${encodeURIComponent(id)}/sentiments`);
 
       if (!response.ok) {
         const errorMessage = await response.json()

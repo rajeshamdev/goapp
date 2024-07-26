@@ -12,8 +12,20 @@ curl -X GET localhost:8080/v1/api/video/vrOttI2cgAM/sentiments | python3 -m json
 
 
 settting up react-app: npx create-react-app <myAPP>
+To start UI app: npm start
+For production app: run "npm run build" in the react-app dir.
+
+On EC2:
+install nginx: sudo yum install -y nginx
+copy react-app to EC2 instance: scp -i ~/.ssh/id_rsa -r build ec2-user@IP:~/
+copy to nginx root dir: sudo mv build /usr/share/nginx/html
+debug : sudo lsof -i :80 or sudo lsof -i :8080
+
 
 For older mac OS (Mojave 10.14.6) install Docker Desktop 4.9.1 from https://docs.docker.com/desktop/release-notes/
 
 docker build -t my-node-app .
 docker run -p 3000:3000 my-node-app
+
+If you are running the Go server on the same EC2 instance as the React app, localhost refers to the EC2 instance itself, not the client’s browser. Instead, you should use the server's public DNS or IP address for API requests.
+

@@ -23,14 +23,26 @@ var (
 	HTTPServer                    *http.Server
 	goRoutinesCnt                 int
 	goRoutinesWG                  sync.WaitGroup
-	apiKey                        string
 	HTTPServerShutdownWaitSeconds int
+)
+
+var (
+	GCPAPIKey    string
+	allowOrigins string // // SHOULD be your frontend URL
+	appEndpoint  string
+)
+
+const (
+	// Refer: https://pkg.go.dev/github.com/gin-contrib/cors#Config
+	allowOriginsDefault = "*"
+	// backend server endpoint
+	appEndpointDefault = "localhost:8080"
 )
 
 func corsMiddleware() gin.HandlerFunc {
 	// CORS middleware configuration
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:3000"} // Replace with your frontend URL
+	config.AllowOrigins = []string{allowOrigins}
 	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 	config.AllowHeaders = []string{"Origin", "Content-Type"}
 
@@ -52,7 +64,7 @@ func serverInit() {
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGHUP, syscall.SIGTERM, syscall.SIGCHLD)
 
 	ginRouter := gin.Default()
-	ginRouter.Use(gin.Logger())
+
 	// Apply CORS middleware
 	ginRouter.Use(corsMiddleware())
 
@@ -62,7 +74,7 @@ func serverInit() {
 	ginRouter.GET("/v1/api/video/:id/sentiments", utube.VideoSentiment)
 
 	HTTPServer = &http.Server{
-		Addr:    ":8080",
+		Addr:    appEndpoint,
 		Handler: ginRouter,
 	}
 
@@ -126,22 +138,38 @@ func readConfig() (*Config, error) {
 	return &config, nil
 }
 
-func main() {
-
+func initEnv() {
 	// pass GCP_APIKEY as env variable or in .config file in cwd
-	apiKey = os.Getenv("GCP_APIKEY")
-	if apiKey == "" {
+	GCPAPIKey = os.Getenv("GCP_APIKEY")
+	if GCPAPIKey == "" {
 		conf, err := readConfig()
 		if err != nil || conf.APIKey == "" {
 			fmt.Printf("pass GCP_APIKEY as env variable or set in .config\n")
 			os.Exit(1)
 		}
-		apiKey = conf.APIKey
+		GCPAPIKey = conf.APIKey
 	}
+
+	allowOrigins = os.Getenv("ALLOW_CORS_ORIGINS")
+	if allowOrigins == "" {
+		fmt.Printf("You must set ALLOW_CORS_ORIGINS in production environment\n")
+		// this is not advisable in prod environment, but ok in dev/test
+		allowOrigins = allowOriginsDefault
+	}
+	appEndpoint = os.Getenv("BACKEND_ENDPOINT")
+	if appEndpoint == "" {
+		fmt.Printf("proceeding with degault app endpoint\n")
+		appEndpoint = appEndpointDefault
+	}
+}
+
+func main() {
+
+	initEnv()
 
 	ctx := context.Background()
 	var err error
-	utube.YoutubeService, err = youtube.NewService(ctx, option.WithAPIKey(apiKey))
+	utube.YoutubeService, err = youtube.NewService(ctx, option.WithAPIKey(GCPAPIKey))
 	if err != nil {
 		fmt.Printf("Error creating new YouTube client: %v. Exiting main", err)
 		os.Exit(1)
