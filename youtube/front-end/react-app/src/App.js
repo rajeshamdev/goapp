@@ -95,12 +95,12 @@ function App() {
   return (
     <div className="App">
       <h1>
-        <div className="text-overlay">Discover data insights from YouTube</div>
+        <div className="text-overlay">Unlock the Power of Data: Revealing Actionable Insights </div>
       </h1>
       <div className="fetch-form">
         <form onSubmit={handleChannelSubmit}>
           <label>
-            Enter Channel ID:
+            Enter YouTube Channel ID:
             <input
               type="text"
               value={channelId}
@@ -108,12 +108,12 @@ function App() {
               required
             />
           </label>
-          <button type="submit">Fetch Channel Insights</button>
+          <button type="submit">Get Insights</button>
         </form>
 
         <form onSubmit={handleVideoSubmit}>
           <label>
-            Enter Video ID:
+            Enter YouTube Video ID:
             <input
               type="text"
               value={videoId}
@@ -121,7 +121,7 @@ function App() {
               required
             />
           </label>
-          <button type="submit">Fetch Video Insights</button>
+          <button type="submit">Get Insights</button>
         </form>
       </div>
 
