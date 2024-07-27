@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './App.css';
 import config from './config'
 
+import dega from './assets/images/dega.png'
+
 const backendURL = config.backendURL;
 
 function App() {
@@ -92,8 +94,9 @@ function App() {
   
   return (
     <div className="App">
-      <h1>Fetch Channel and Video Insights</h1>
-
+      <h1>
+        <div className="text-overlay">Discover data insights from YouTube</div>
+      </h1>
       <div className="fetch-form">
         <form onSubmit={handleChannelSubmit}>
           <label>
@@ -156,6 +159,10 @@ function App() {
           <p>Negative Comments: {videoSentiments.negativecomments}</p>
         </div>
       )}
+
+      <footer className="App-footer">
+        <img src={dega} alt="Scoop your insights from ocean of data" />
+      </footer>
     </div>
   );
 }
