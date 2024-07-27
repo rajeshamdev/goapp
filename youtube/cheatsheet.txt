@@ -29,3 +29,20 @@ docker run -p 3000:3000 my-node-app
 
 If you are running the Go server on the same EC2 instance as the React app, localhost refers to the EC2 instance itself, not the client’s browser. Instead, you should use the server's public DNS or IP address for API requests.
 
+
+Destroy/Apply specific resource using terraform example:
+ - terraform state list
+ - terraform destroy -target=aws_vpc_security_group_egress_rule.allow_8080
+ - terraform apply -target=aws_vpc_security_group_ingress_rule.allow_8080
+
+
+golang server to bind :8080:
+
+https://stackoverflow.com/questions/73830150/cannot-assign-requested-address-in-aws-java-server-socket
+
+In general you would not bind to the IP address directly. You would instead bind to all interfaces by not specifying a host. In this way you will respond to any incoming connections to the specified port. If I look at a Wildfly server I have running with Apache HTTPD in front of it I get:
+
+$ netstat -na | grep LIST
+tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN
+tcp6       0      0 :::80                   :::*                    LISTEN
+In my case the Wildfly server is using IPv4 and Apache is using IPv6. But they are both listening on what is, for IPv4, 0.0.0.0. The O/S takes care of the external interface to internal address mapping.

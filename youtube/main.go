@@ -29,14 +29,11 @@ var (
 var (
 	GCPAPIKey    string
 	allowOrigins string // // SHOULD be your frontend URL
-	appEndpoint  string
 )
 
 const (
 	// Refer: https://pkg.go.dev/github.com/gin-contrib/cors#Config
 	allowOriginsDefault = "*"
-	// backend server endpoint
-	appEndpointDefault = "localhost:8080"
 )
 
 func corsMiddleware() gin.HandlerFunc {
@@ -74,7 +71,7 @@ func serverInit() {
 	ginRouter.GET("/v1/api/video/:id/sentiments", utube.VideoSentiment)
 
 	HTTPServer = &http.Server{
-		Addr:    appEndpoint,
+		Addr:    ":8080",
 		Handler: ginRouter,
 	}
 
@@ -155,11 +152,6 @@ func initEnv() {
 		fmt.Printf("You must set ALLOW_CORS_ORIGINS in production environment\n")
 		// this is not advisable in prod environment, but ok in dev/test
 		allowOrigins = allowOriginsDefault
-	}
-	appEndpoint = os.Getenv("BACKEND_ENDPOINT")
-	if appEndpoint == "" {
-		fmt.Printf("proceeding with degault app endpoint\n")
-		appEndpoint = appEndpointDefault
 	}
 }
 
