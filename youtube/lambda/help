@@ -1,0 +1,7 @@
+
+For some reason, the binary has to be bootstrap(?). Below steps worked for now"
+ GOARCH=amd64 GOOS=linux go build -o bootstrap main.go
+ zip lambdaFunc.zip bootstrap 
+
+Then upload lambdaFunc.zip to Lambda func.
+
