@@ -39,7 +39,9 @@ func HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProx
 
 	err := lambdaSetup()
 	if err != nil {
-		return events.APIGatewayProxyResponse{StatusCode: http.StatusBadRequest}, err
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusBadRequest,
+		}, err
 	}
 
 	switch request.Resource {
@@ -48,18 +50,23 @@ func HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProx
 		return getChannelInsights(request)
 
 	case "/v1/api/channel/videos":
-		return events.APIGatewayProxyResponse{StatusCode: http.StatusNotImplemented}, fmt.Errorf("TBD")
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusNotImplemented,
+		}, fmt.Errorf("TBD")
 
 	case "/v1/api/video/insights":
 		return getVideoInsights(request)
 
 	case "/v1/api/video/sentiments":
-		return events.APIGatewayProxyResponse{StatusCode: http.StatusNotImplemented}, fmt.Errorf("TBD")
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusNotImplemented,
+		}, fmt.Errorf("TBD")
 
 	default:
-		return events.APIGatewayProxyResponse{StatusCode: http.StatusBadRequest}, fmt.Errorf("invalid request")
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusBadRequest,
+		}, fmt.Errorf("invalid request")
 	}
-
 }
 
 // Define a struct for the JSON response
@@ -79,12 +86,16 @@ func getChannelInsights(request events.APIGatewayProxyRequest) (events.APIGatewa
 		if apiErr, ok := err.(*googleapi.Error); ok {
 			code = apiErr.Code
 		}
-		return events.APIGatewayProxyResponse{StatusCode: code}, err
+		return events.APIGatewayProxyResponse{
+			StatusCode: code,
+		}, err
 	}
 
 	if resp.Items == nil || resp.Items[0] == nil {
 		err = fmt.Errorf("channel id: %v not found", channelID)
-		return events.APIGatewayProxyResponse{StatusCode: http.StatusNotFound}, err
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusNotFound,
+		}, err
 	}
 
 	channel := resp.Items[0]
@@ -95,7 +106,9 @@ func getChannelInsights(request events.APIGatewayProxyRequest) (events.APIGatewa
 
 	respBody, err := json.Marshal(Resp)
 	if err != nil {
-		return events.APIGatewayProxyResponse{StatusCode: 500}, err
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+		}, err
 	}
 
 	return events.APIGatewayProxyResponse{
@@ -132,13 +145,17 @@ func getVideoInsights(request events.APIGatewayProxyRequest) (events.APIGatewayP
 		if apiErr, ok := err.(*googleapi.Error); ok {
 			code = apiErr.Code
 		}
-		return events.APIGatewayProxyResponse{StatusCode: code}, err
+		return events.APIGatewayProxyResponse{
+			StatusCode: code,
+		}, err
 	}
 
 	// Check if there are any videos matching the request
 	if len(resp.Items) == 0 || resp.Items[0] == nil {
 		err := fmt.Errorf("video id: %v not found", videoID)
-		return events.APIGatewayProxyResponse{StatusCode: http.StatusNotFound}, err
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusNotFound,
+		}, err
 	}
 
 	video := resp.Items[0]
@@ -163,7 +180,9 @@ func getVideoInsights(request events.APIGatewayProxyRequest) (events.APIGatewayP
 
 	respBody, err := json.Marshal(Resp)
 	if err != nil {
-		return events.APIGatewayProxyResponse{StatusCode: 500}, err
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+		}, err
 	}
 
 	return events.APIGatewayProxyResponse{
