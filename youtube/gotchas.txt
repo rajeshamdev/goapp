@@ -1,3 +1,22 @@
+
+EC2 key pair tip: A key pair consists of "public key" that AWS stores, and a "private key" that you store.
+Together, they allow you to connect to your instance securely. Download the private key file (.pem file) and
+store it in a secure and accessible location.
+
+If needed, change the pem file perms: chmod 400 <key.pem>
+ssh -i "private_key.pem" ec2-user@ip
+To become root: "sudo su" after logging in with ec2-user.
+
+You could pass your public key while creating ec2 instance with terraform. In this case, downloadng
+ec2 instance's private key is not required. You can use your private key to connect.
+
+Add the EC2 key pair into your local ssh authentication agent using:
+ ssh-add -K lab-002.pem (macos)
+ ssh-add -c lab-002.pem (linux)
+
+
+Testing of Golang App:
+
 curl -X GET localhost:8080/v1/api/channel/UCZN6X0ldwi-2W4TV-ab5M_g/insights | python3 -m json.tool
 curl -X GET localhost:8080/v1/api/channel/UCZN6X0ldwi-2W4TV-ab5M_g/videos | python3 -m json.tool
 curl -X GET localhost:8080/v1/api/video/vrOttI2cgAM/insights | python3 -m json.tool
@@ -20,14 +39,16 @@ install nginx: sudo yum install -y nginx
 copy react-app to EC2 instance: scp -i ~/.ssh/id_rsa -r build ec2-user@IP:~/
 copy to nginx root dir: sudo mv build /usr/share/nginx/html
 debug : sudo lsof -i :80 or sudo lsof -i :8080
-
+golang server to bind :8080:
 
 For older mac OS (Mojave 10.14.6) install Docker Desktop 4.9.1 from https://docs.docker.com/desktop/release-notes/
 
 docker build -t my-node-app .
 docker run -p 3000:3000 my-node-app
 
-If you are running the Go server on the same EC2 instance as the React app, localhost refers to the EC2 instance itself, not the client’s browser. Instead, you should use the server's public DNS or IP address for API requests.
+If you are running the Go server on the same EC2 instance as the React app, localhost refers to the EC2
+instance itself, not the client’s browser. Instead, you should use the server's public DNS or IP address 
+for API requests.
 
 
 Destroy/Apply specific resource using terraform example:
@@ -36,13 +57,16 @@ Destroy/Apply specific resource using terraform example:
  - terraform apply -target=aws_vpc_security_group_ingress_rule.allow_8080
 
 
-golang server to bind :8080:
 
 https://stackoverflow.com/questions/73830150/cannot-assign-requested-address-in-aws-java-server-socket
 
-In general you would not bind to the IP address directly. You would instead bind to all interfaces by not specifying a host. In this way you will respond to any incoming connections to the specified port. If I look at a Wildfly server I have running with Apache HTTPD in front of it I get:
+In general you would not bind to the IP address directly. You would instead bind to all interfaces by not
+specifying a host. In this way you will respond to any incoming connections to the specified port. If I
+look at a Wildfly server I have running with Apache HTTPD in front of it I get:
 
 $ netstat -na | grep LIST
 tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN
 tcp6       0      0 :::80                   :::*                    LISTEN
-In my case the Wildfly server is using IPv4 and Apache is using IPv6. But they are both listening on what is, for IPv4, 0.0.0.0. The O/S takes care of the external interface to internal address mapping.
+In my case the Wildfly server is using IPv4 and Apache is using IPv6. But they are both listening
+on what is, for IPv4, 0.0.0.0. The O/S takes care of the external interface to internal address mapping.
+
