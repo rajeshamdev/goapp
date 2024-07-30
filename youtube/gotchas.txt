@@ -19,6 +19,12 @@ Add the EC2 key pair into your local ssh authentication agent using:
 
 Testing of Golang App:
 ----------------------
+
+ make linux
+ docker build -t goapp:v1.0 .
+ docker images
+ docker run -p 8080:8080 -e GCP_APIKEY="key" --name goapp goapp:v1.0
+
 curl -X GET localhost:8080/v1/api/channel/UCZN6X0ldwi-2W4TV-ab5M_g/insights | python3 -m json.tool
 curl -X GET localhost:8080/v1/api/channel/UCZN6X0ldwi-2W4TV-ab5M_g/videos | python3 -m json.tool
 curl -X GET localhost:8080/v1/api/video/vrOttI2cgAM/insights | python3 -m json.tool
@@ -30,6 +36,7 @@ curl -X GET localhost:8080/v1/api/video/vrOttI2cgAM/sentiments | python3 -m json
 4) Sahil Bhadviya: UCdc6ObxhdQ8eZIFquU2xolA
 5) Moneyvest: UCf3g0uNBn6wPpgrTK_AbJrQ
 6) First Post: UCz8QaiQxApLq8sLNcszYyJw
+
 
 Front-end React App:
 -------------------
@@ -49,6 +56,17 @@ install nginx: sudo yum install -y nginx
 copy react-app to EC2 instance: scp -i ~/.ssh/id_rsa -r build ec2-user@IP:~/
 copy to nginx root dir: sudo mv build /usr/share/nginx/html
 debug : sudo lsof -i :80 or sudo lsof -i :8080
+
+Running UI and Backend App together:
+-----------------------------------
+
+docker run -d -p 8080:8080 --name goapp -e GCP_APIKEY="key" goapp:v1.0
+docker run -d -p 3000:80 --name uiapp uiapp:v1.0
+
+Access UI: http://localhost:3000
+
+
+
 
 Mac OS Update:
 -------------
