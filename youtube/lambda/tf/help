@@ -1,2 +1,0 @@
-
-terraform apply -var="gcp_apikey=<key>"
