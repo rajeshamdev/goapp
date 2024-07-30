@@ -1,4 +1,6 @@
 
+EC2:
+-----
 EC2 key pair tip: A key pair consists of "public key" that AWS stores, and a "private key" that you store.
 Together, they allow you to connect to your instance securely. Download the private key file (.pem file) and
 store it in a secure and accessible location.
@@ -16,7 +18,7 @@ Add the EC2 key pair into your local ssh authentication agent using:
 
 
 Testing of Golang App:
-
+----------------------
 curl -X GET localhost:8080/v1/api/channel/UCZN6X0ldwi-2W4TV-ab5M_g/insights | python3 -m json.tool
 curl -X GET localhost:8080/v1/api/channel/UCZN6X0ldwi-2W4TV-ab5M_g/videos | python3 -m json.tool
 curl -X GET localhost:8080/v1/api/video/vrOttI2cgAM/insights | python3 -m json.tool
@@ -29,18 +31,27 @@ curl -X GET localhost:8080/v1/api/video/vrOttI2cgAM/sentiments | python3 -m json
 5) Moneyvest: UCf3g0uNBn6wPpgrTK_AbJrQ
 6) First Post: UCz8QaiQxApLq8sLNcszYyJw
 
-
+Front-end React App:
+-------------------
 settting up react-app: npx create-react-app <myAPP>
 To start UI app: npm start
 For production app: run "npm run build" in the react-app dir.
+
+If you are running the Go server on the same EC2 instance as the React app, localhost refers to the EC2
+instance itself, not the client’s browser. Instead, you should use the server's public DNS or IP address
+for API requests.
+
+docker build -t my-node-app .
+docker run -p 3000:3000 my-node-app
 
 On EC2:
 install nginx: sudo yum install -y nginx
 copy react-app to EC2 instance: scp -i ~/.ssh/id_rsa -r build ec2-user@IP:~/
 copy to nginx root dir: sudo mv build /usr/share/nginx/html
 debug : sudo lsof -i :80 or sudo lsof -i :8080
-golang server to bind :8080:
 
+Mac OS Update:
+-------------
 For older mac OS (Mojave 10.14.6) install Docker Desktop 4.9.1 from https://docs.docker.com/desktop/release-notes/
 
 docker build -t my-node-app .
@@ -51,13 +62,19 @@ instance itself, not the client’s browser. Instead, you should use the server'
 for API requests.
 
 
+Terraform:
+---------
 Destroy/Apply specific resource using terraform example:
  - terraform state list
  - terraform destroy -target=aws_vpc_security_group_egress_rule.allow_8080
  - terraform apply -target=aws_vpc_security_group_ingress_rule.allow_8080
+Applying to specific target is THE MOST POWERFUL thing as you can push you updated code changes to just that
+target while keeping everything else the same.
 
 
-
+Golang backend server:
+---------------------
+golang server to bind :8080:
 https://stackoverflow.com/questions/73830150/cannot-assign-requested-address-in-aws-java-server-socket
 
 In general you would not bind to the IP address directly. You would instead bind to all interfaces by not
@@ -70,3 +87,26 @@ tcp6       0      0 :::80                   :::*                    LISTEN
 In my case the Wildfly server is using IPv4 and Apache is using IPv6. But they are both listening
 on what is, for IPv4, 0.0.0.0. The O/S takes care of the external interface to internal address mapping.
 
+
+Lambda:
+------
+For some reason, the binary has to be bootstrap(?). Below steps worked for "now":
+ - GOARCH=amd64 GOOS=linux go build -o bootstrap main.go
+ - zip lambdaFunc.zip bootstrap
+
+Then upload lambdaFunc.zip to Lambda func.
+
+Passing env variable:
+ - as tf variable:  terraform apply -var="gcp_apikey=<key>"
+ - as env variable: terraform apply -var="GCP_APIKEY=<key>"
+
+Docker/Containers:
+-----------------
+docker build -t youtube-react-app .
+docker image ls
+docker run -d -p 8080:80 --name myapp1 youtube-react-app
+docker run -d -p 8081:80 --name myapp2 youtube-react-app
+docker run -d -p 8082:80 --name myapp3 youtube-react-app
+docker exec -it myapp1 /bin/sh
+docker stop 91 59 29
+docker rm 91 59 29
