@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import './App.css';
-import config from './config'
 
 import dega from './assets/images/dega.png'
 
-const backendURL = config.backendURL;
+const backendURL = process.env.REACT_APP_BACKEND_URL;
 
 function App() {
   const [channelId, setChannelId] = useState('');

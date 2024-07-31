@@ -1,7 +1,7 @@
 // global configs
 
 const config = {
-    backendURL : 'http://localhost:8080'
+    backendURL : process.env.REACT_APP_BACKEND_URL
 };
 
 export default config;
