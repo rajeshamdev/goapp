@@ -6,6 +6,9 @@ pip3 install pandas numpy yfinance tabulate
 import yfinance as yf
 import pandas as pd
 from tabulate import tabulate
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
 
 class StockAnalysis:
 
@@ -147,10 +150,12 @@ def main():
     metrics = metrics.map(stock.convertValue)
     print(metrics)
 
-    # find RSI, MACD etc
-    startDate = input("Enter Start Date in YYYY-MM-DD format: ")
-    endDate = input("Enter End Date in YYYY-MM-DD format: ")
-    stock.fetchStockData(startDate, endDate)
+    # find RSI, MACD
+    today = datetime.now()
+    startDate = today.strftime('%Y-%m-%d')
+    sixMonthsBackDate = (today - relativedelta(months=6)).strftime('%Y-%m-%d')
+
+    stock.fetchStockData(sixMonthsBackDate, startDate)
     stock.findRSI()
     stock.findMACD()
     # Display the last few rows with the indicators
