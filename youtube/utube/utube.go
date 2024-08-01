@@ -270,3 +270,9 @@ func formatNumber(num float64) string {
 		return fmt.Sprintf("%.2f%s", num, []string{"", "K", "M", "B", "T"}[magnitude])
 	}
 }
+
+func HealthCheck(c *gin.Context) {
+	fmt.Printf("healthcheck OK\n")
+	c.Status(http.StatusOK)
+	return
+}

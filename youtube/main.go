@@ -69,6 +69,7 @@ func serverInit() {
 	ginRouter.GET("/v1/api/channel/:id/videos", utube.GetChannelVideos)
 	ginRouter.GET("/v1/api/video/:id/insights", utube.GetVideoInsights)
 	ginRouter.GET("/v1/api/video/:id/sentiments", utube.VideoSentiment)
+	ginRouter.GET("/v1/api/health", utube.HealthCheck)
 
 	HTTPServer = &http.Server{
 		Addr:    ":8080",

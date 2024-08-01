@@ -129,3 +129,33 @@ docker run -d -p 8082:80 --name myapp3 youtube-react-app
 docker exec -it myapp1 /bin/sh
 docker stop 91 59 29
 docker rm 91 59 29
+
+
+Pushing image to ECR:
+---------------------
+
+List ECR Repositories:
+    aws ecr describe-repositories --query 'repositories[*].repositoryUri' --output table
+    aws ecr describe-repositories
+
+Authenticate Docker to Your ECR Registry:
+    aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin <account>.dkr.ecr.us-east-2.amazonaws.com
+
+Tag Your Docker Image:
+    docker tag goapp:v1.0 <account>.dkr.ecr.us-east-2.amazonaws.com/rajeshamdev:goapp-v1.0
+
+Push Your Docker Image to ECR:
+    docker push <account>.dkr.ecr.us-east-2.amazonaws.com/rajeshamdev:goapp-v1.0
+
+List images:
+    aws ecr list-images --repository-name rajeshamdev --region us-east-2
+
+To delete image from ECR:
+    aws ecr batch-delete-image --repository-name rajeshamdev --region us-east-2 --image-ids imageDigest=
+
+
+Copying docker image:
+---------------------
+docker save -o my_image.tar image_name:tag
+scp my_image.tar user@destination_machine:/path/to/destination
+docker load -i /path/to/destination/my_image.tar
