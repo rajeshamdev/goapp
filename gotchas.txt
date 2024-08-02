@@ -24,7 +24,7 @@ Testing of Golang App:
  docker build -t goapp:v1.0 .
  docker images
  docker run -p 8080:8080 -e GCP_APIKEY="key" --name goapp goapp:v1.0
- Handy during testing because this stops and removes the container: docker run --rm -p 8080:8080 -e GCP_APIKEY="key" --name goapp goapp:v1.0
+ Handy during testing : docker run --rm -p 8080:8080 -e GCP_APIKEY="key" --name goapp goapp:v1.0
 
 curl -X GET localhost:8080/v1/api/channel/UCZN6X0ldwi-2W4TV-ab5M_g/insights | python3 -m json.tool
 curl -X GET localhost:8080/v1/api/channel/UCZN6X0ldwi-2W4TV-ab5M_g/videos | python3 -m json.tool
@@ -62,9 +62,9 @@ Running UI and Backend App together:
 -----------------------------------
 
 docker build -t goapp:v1.0 .
-docker run -d -p 8081:8080 --name goapp -e GCP_APIKEY="key" goapp:v1.0
+docker run -d --rm -p 8081:8080 --name goapp -e GCP_APIKEY="key" goapp:v1.0
 docker build -t uiapp:v1.0 --build-arg REACT_APP_BACKEND_URL=http://localhost:8081 .
-docker run -d -p 3000:80 --name uiapp uiapp:v1.0
+docker run -d --rm -p 3000:80 --name uiapp uiapp:v1.0
 Access UI: http://localhost:3000
 
 
@@ -116,7 +116,6 @@ Then upload lambdaFunc.zip to Lambda func.
 
 Passing env variable:
  - as tf variable:  terraform apply -var="gcp_apikey=<key>"
- - as env variable: terraform apply -var="GCP_APIKEY=<key>"
 
 Docker/Containers:
 -----------------
