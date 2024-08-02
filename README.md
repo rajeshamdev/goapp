@@ -1,1 +1,1 @@
-# GUI React App, Golang backend REST API server, Lambda deployment to AWS using terrraform
+# GUI React App and Golang backend REST API server
