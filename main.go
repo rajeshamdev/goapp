@@ -13,7 +13,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/rajeshamdev/analytics/youtube/utube"
+	"github.com/rajeshamdev/goapp/utube"
 	"google.golang.org/api/option"
 	"google.golang.org/api/youtube/v3"
 )

@@ -4,7 +4,7 @@ variable "aws_region" {
 }
 
 variable "gcp_apikey" {
-  description = "GCP API KEY"
+  description = "GCP_APIKEY"
   type        = string
   sensitive   = true
 }

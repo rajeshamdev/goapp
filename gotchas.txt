@@ -153,9 +153,3 @@ List images:
 To delete image from ECR:
     aws ecr batch-delete-image --repository-name rajeshamdev --region us-east-2 --image-ids imageDigest=
 
-
-Copying docker image:
----------------------
-docker save -o my_image.tar image_name:tag
-scp my_image.tar user@destination_machine:/path/to/destination
-docker load -i /path/to/destination/my_image.tar

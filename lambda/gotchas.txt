@@ -7,6 +7,5 @@ Then upload lambdaFunc.zip to Lambda func.
 
 Passing env variable:
  - as tf variable:  terraform apply -var="gcp_apikey=<key>"
- - as env variable: terraform apply -var="GCP_APIKEY=<key>"
 
 

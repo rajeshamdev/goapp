@@ -1,8 +1,8 @@
-module github.com/rajeshamdev/analytics/youtube
+module github.com/rajeshamdev/goapp
 
 go 1.21.12
 
-replace github.com/rajeshamdev/analytics/youtube => ./
+replace github.com/rajeshamdev/goapp => ./
 
 require (
 	github.com/gin-contrib/cors v1.7.2
