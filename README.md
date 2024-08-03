@@ -19,6 +19,8 @@ and YouTube Data APIs:
  4) Gets comments, and the user who commented
  5) Does sentiment analysis (VADER - Valence Aware Dictionary and sEntiment Reasoner) on the comments.
 
+Note: YouTube Data APIs are subjective to API Rate Limits.
+
 Front-end is a very simple React GUI app.
 
 Docker images built for both apps (backend and frontend):
