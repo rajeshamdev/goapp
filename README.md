@@ -25,7 +25,7 @@ Docker images built for both apps (backend and frontend):
  - Tested standalone
  - Tested by deploying on AWS with API Gateway + Lambda
  - Tested by deploying on ECS:
-     1) with EC2 (with Auto Scaling Group) infrastructure
+     1) with EC2 (Auto Scaling Group) infrastructure
      2) Fargate serverless Infrastructure
 
 Terraform to deploy on AWS.
