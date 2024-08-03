@@ -7,7 +7,7 @@ Backend App is written in golang:
  4) Gets comments, and the user who commented
  5) does sentiment analysis (VADER - Valence Aware Dictionary and sEntiment Reasoner) on the comments.
 
-The app uses youtube data APIs (golang). App provides REST APIs by utilizing Golang gin router framework.
+The app uses youtube data APIs (golang). App provides REST APIs by utilizing Golang gin framework for routes etc.
 
 Also, wrote a simple React GUI app.
 
