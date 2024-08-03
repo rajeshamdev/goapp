@@ -11,6 +11,6 @@ The app uses youtube data APIs (golang). App provides REST APIs by utilizing Gol
 
 Also, wrote a simple React GUI app.
 
-Both apps (backend and frontend) are built as docker images, tested standalone, and also tested by deploying
-on AWS with API Gateway + Lambda, ECS with EC2 and Fargate. Used Terraform to deploy on AWS.
+Docker images built for both apps (backend and frontend), tested standalone and also tested by deploying
+on AWS with API Gateway + Lambda, ECS with EC2 (with Auto Scaling Group) and Fargate. Used Terraform to deploy on AWS.
 
