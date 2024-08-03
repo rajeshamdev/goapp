@@ -30,5 +30,5 @@ Docker images built for both apps (backend and frontend):
      1) with EC2 (Auto Scaling Group) infrastructure
      2) Fargate serverless Infrastructure
 
-Terraform to deploy on AWS.
+Used Terraform to deploy on AWS.
 
