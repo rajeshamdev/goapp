@@ -19,14 +19,16 @@ and YouTube Data APIs:
  4) Gets comments, and the user who commented
  5) Does sentiment analysis (VADER - Valence Aware Dictionary and sEntiment Reasoner) on the comments.
 
+Note: YouTube Data APIs are subjective to API Rate Limits.
+
 Front-end is a very simple React GUI app.
 
 Docker images built for both apps (backend and frontend):
  - Tested standalone
  - Tested by deploying on AWS with API Gateway + Lambda
  - Tested by deploying on ECS:
-     1) with EC2 (with Auto Scaling Group) infrastructure
+     1) with EC2 (Auto Scaling Group) infrastructure
      2) Fargate serverless Infrastructure
 
-Terraform to deploy on AWS.
+Used Terraform to deploy on AWS.
 
