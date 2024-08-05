@@ -9,12 +9,17 @@ variable "gcp_apikey" {
   sensitive   = true
 }
 
-variable "insights_allow_cors_origins" {
+variable "apigw_stage" {
+  description = "API Gateway Stage"
+  type        = string
+}
+
+variable "cors_origins" {
   description = "list of allow cors origins"
   type = list
 }
 
-variable "insights_allow_methods" {
+variable "api_methods" {
   description = "list of allowed methods allowed"
   type = list
 }

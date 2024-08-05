@@ -1,8 +1,8 @@
 
 # Create Lambda function
-resource "aws_lambda_function" "insights_lambda_func" {
+resource "aws_lambda_function" "bowbow_lambda_func" {
   filename         = "lambdaFunc.zip"
-  function_name    = "insights-golambda-function"
+  function_name    = "bowbow-lambda-function"
   role             = aws_iam_role.lambda_role.arn
   handler          = "main"
   source_code_hash = filebase64sha256("lambdaFunc.zip")
