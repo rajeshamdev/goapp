@@ -4,6 +4,15 @@ resource "aws_apigatewayv2_api" "insights_http_api" {
   name          = "insights-http-api"
   protocol_type = "HTTP"
   description   = "AWS Lambda for Insights Project"
+
+  cors_configuration {
+    allow_origins  = var.insights_allow_cors_origins
+    allow_methods  = var.insights_allow_methods
+    allow_headers  = ["Content-Type", "Authorization"]
+    expose_headers = ["X-Custom-Header"]
+    max_age        = 3600
+  }
+
 }
 
 # Create Lambda integration
@@ -17,13 +26,13 @@ resource "aws_apigatewayv2_integration" "lambda_integration" {
 # Create routes
 resource "aws_apigatewayv2_route" "video_insights_route" {
   api_id    = aws_apigatewayv2_api.insights_http_api.id
-  route_key = "GET /v1/api/video/insights"
+  route_key = "GET /v1/api/video/{id}/insights"
   target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
 }
 
 resource "aws_apigatewayv2_route" "channel_insights_route" {
   api_id    = aws_apigatewayv2_api.insights_http_api.id
-  route_key = "GET /v1/api/channel/insights"
+  route_key = "GET /v1/api/channel/{id}/insights"
   target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
 }
 

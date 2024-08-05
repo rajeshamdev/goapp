@@ -111,6 +111,13 @@ Then upload lambdaFunc.zip to Lambda func.
 Passing env variable:
  - as tf variable:  terraform apply -var="gcp_apikey=<key>"
 
+Print API URL:
+ - terraform output
+
+Test:
+curl -X GET https://<id>.execute-api.us-east-2.amazonaws.com/dev/v1/api/channel/insights?id="UChBT5TlUeG68PKvJSg6MkqQ" | python3 -m json.tool
+
+
 Docker/Containers:
 -----------------
 docker build -t youtube-react-app .

@@ -17,6 +17,12 @@ import (
 var gcpAPIKey string
 var ytConn *youtube.Service
 
+var httpRespHeaders = map[string]string{
+	"Content-Type":                 "application/json",
+	"Access-Control-Allow-Origin":  "*", // update with your origins
+	"Access-Control-Allow-Headers": "Content-Type",
+}
+
 func lambdaSetup() error {
 
 	gcpAPIKey = os.Getenv("GCP_APIKEY")
@@ -35,29 +41,30 @@ func lambdaSetup() error {
 
 func HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	// fmt.Printf("DEBUG: entire req: %+v\n", request)
+	fmt.Printf("DEBUG: entire req: %+v\n", request)
 
 	err := lambdaSetup()
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
+			Headers:    httpRespHeaders,
 		}, err
 	}
 
 	switch request.Resource {
 
-	case "/v1/api/channel/insights":
+	case "/v1/api/channel/{id}/insights":
 		return getChannelInsights(request)
 
-	case "/v1/api/channel/videos":
+	case "/v1/api/channel/{id}/videos":
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusNotImplemented,
 		}, fmt.Errorf("TBD")
 
-	case "/v1/api/video/insights":
+	case "/v1/api/video/{id}/insights":
 		return getVideoInsights(request)
 
-	case "/v1/api/video/sentiments":
+	case "/v1/api/video/{id}/sentiments":
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusNotImplemented,
 		}, fmt.Errorf("TBD")
@@ -65,6 +72,7 @@ func HandleRequest(request events.APIGatewayProxyRequest) (events.APIGatewayProx
 	default:
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusBadRequest,
+			Headers:    httpRespHeaders,
 		}, fmt.Errorf("invalid request")
 	}
 }
@@ -77,7 +85,9 @@ type Response struct {
 
 func getChannelInsights(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	channelID := request.QueryStringParameters["id"]
+	// channelID := request.QueryStringParameters["id"]
+	channelID := request.PathParameters["id"]
+	fmt.Printf("getChannelInsights : DEBUG: entire channelID: %+v\n", channelID)
 
 	ChannelStatsCall := ytConn.Channels.List([]string{"statistics"}).Id(channelID)
 	resp, err := ChannelStatsCall.Do()
@@ -88,6 +98,7 @@ func getChannelInsights(request events.APIGatewayProxyRequest) (events.APIGatewa
 		}
 		return events.APIGatewayProxyResponse{
 			StatusCode: code,
+			Headers:    httpRespHeaders,
 		}, err
 	}
 
@@ -95,6 +106,7 @@ func getChannelInsights(request events.APIGatewayProxyRequest) (events.APIGatewa
 		err = fmt.Errorf("channel id: %v not found", channelID)
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusNotFound,
+			Headers:    httpRespHeaders,
 		}, err
 	}
 
@@ -108,13 +120,14 @@ func getChannelInsights(request events.APIGatewayProxyRequest) (events.APIGatewa
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
+			Headers:    httpRespHeaders,
 		}, err
 	}
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
 		Body:       string(respBody),
-		Headers:    map[string]string{"Content-Type": "application/json"},
+		Headers:    httpRespHeaders,
 	}, nil
 }
 
@@ -136,7 +149,9 @@ type ResponseVideoInsignts struct {
 
 func getVideoInsights(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	videoID := request.QueryStringParameters["id"]
+	// videoID := request.QueryStringParameters["id"]
+	videoID := request.PathParameters["id"]
+	fmt.Printf("getChannelInsights : DEBUG: entire channelID: %+v\n", videoID)
 
 	videoListApiCall := ytConn.Videos.List([]string{"snippet,statistics"}).Id(videoID)
 	resp, err := videoListApiCall.Do()
@@ -147,6 +162,7 @@ func getVideoInsights(request events.APIGatewayProxyRequest) (events.APIGatewayP
 		}
 		return events.APIGatewayProxyResponse{
 			StatusCode: code,
+			Headers:    httpRespHeaders,
 		}, err
 	}
 
@@ -155,6 +171,7 @@ func getVideoInsights(request events.APIGatewayProxyRequest) (events.APIGatewayP
 		err := fmt.Errorf("video id: %v not found", videoID)
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusNotFound,
+			Headers:    httpRespHeaders,
 		}, err
 	}
 
@@ -182,13 +199,14 @@ func getVideoInsights(request events.APIGatewayProxyRequest) (events.APIGatewayP
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
+			Headers:    httpRespHeaders,
 		}, err
 	}
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusOK,
 		Body:       string(respBody),
-		Headers:    map[string]string{"Content-Type": "application/json"},
+		Headers:    httpRespHeaders,
 	}, nil
 }
 
