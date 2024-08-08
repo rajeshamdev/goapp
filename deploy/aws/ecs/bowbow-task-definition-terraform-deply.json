@@ -1,0 +1,63 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:us-east-2:<>:task-definition/bowbow-task-definition:17",
+    "containerDefinitions": [
+        {
+            "name": "goapp",
+            "image": "<>.dkr.ecr.us-east-2.amazonaws.com/rajeshamdev:goapp-v1.0",
+            "cpu": 256,
+            "memory": 512,
+            "portMappings": [
+                {
+                    "containerPort": 8080,
+                    "hostPort": 8080,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "GCP_APIKEY",
+                    "value": "<>"
+                }
+            ],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "systemControls": []
+        }
+    ],
+    "family": "bowbow-task-definition",
+    "taskRoleArn": "arn:aws:iam::<>:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::<>:role/ecsTaskExecutionRole",
+    "networkMode": "bridge",
+    "revision": 17,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
+        },
+        {
+            "name": "ecs.capability.execution-role-ecr-pull"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EXTERNAL",
+        "EC2"
+    ],
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "cpu": "1024",
+    "memory": "1024",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "registeredAt": "2024-08-07T23:23:41.833Z",
+    "registeredBy": "arn:aws:iam::<>:root",
+    "tags": []
+}
