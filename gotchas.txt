@@ -42,6 +42,8 @@ Front-end React App:
 -------------------
 settting up react-app: npx create-react-app <myAPP>
 To start UI app: npm start
+
+
 For production app: run "npm run build" in the react-app dir.
 
 Running Go server on the same EC2 instance as the React app, localhost refers to the EC2
@@ -110,6 +112,7 @@ Then upload lambdaFunc.zip to Lambda func.
 
 Passing env variable:
  - as tf variable:  terraform apply -var="gcp_apikey=<key>"
+ - OR export TF_VAR_gcp_apikey=<>. This way, dont need to pass -var to terraform plan or apply
 
 Print API URL:
  - terraform output
