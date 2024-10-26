@@ -20,6 +20,6 @@ variable "cors_origins" {
 }
 
 variable "api_methods" {
-  description = "list of allowed methods"
+  description = "list allowed methods"
   type = list
 }
