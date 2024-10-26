@@ -3,7 +3,7 @@
 resource "aws_apigatewayv2_api" "bowbow_http_api" {
   name          = "bowbow-http-api"
   protocol_type = "HTTP"
-  description   = "AWS Lambda for bowbow Project"
+  description   = "AWS lambda for bowbow Project"
 
   cors_configuration {
     allow_origins  = var.cors_origins
