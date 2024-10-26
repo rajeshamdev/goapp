@@ -8,6 +8,7 @@ on:
       - main
     paths:
       - 'lambda/**' # trigger on changes to lambda code
+      - 'deploy/aws/lambda/**'
 
   jobs:
     build:
