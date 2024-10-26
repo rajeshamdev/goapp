@@ -1,11 +1,11 @@
 
 # Create Lambda function
 resource "aws_lambda_function" "bowbow_lambda_func" {
-  filename         = "lambdaFunc.zip"
+  filename         = "bowbowLambdaFunc.zip"
   function_name    = "bowbow-lambda-function"
   role             = aws_iam_role.lambda_role.arn
   handler          = "main"
-  source_code_hash = filebase64sha256("lambdaFunc.zip")
+  source_code_hash = filebase64sha256("bowbowLambdaFunc.zip")
   runtime          = "provided.al2023"
 
   environment {
