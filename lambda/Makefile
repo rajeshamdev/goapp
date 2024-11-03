@@ -1,3 +1,6 @@
+
+# makefile to build lambda func
+
 GO = go
 GOBUILD = $(GO) build
 GOTEST  = $(GO) test
