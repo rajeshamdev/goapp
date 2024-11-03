@@ -1,5 +1,5 @@
 
-# makefile to build lambda func
+# build lambda func
 
 GO = go
 GOBUILD = $(GO) build
