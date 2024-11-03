@@ -1,1 +1,5 @@
+
+kubernetes quick ref: https://kubernetes.io/docs/reference/kubectl/quick-reference/
+
 creadit to: https://nicwortel.nl/cheat-sheets
+
