@@ -1,0 +1,19 @@
+aws eks create-nodegroup --cluster-name k8cluster \
+ --nodegroup-name k8nodes \
+ --node-role arn:aws:iam::<ACCOUNT_ID>:role/eksClusterRole \
+ --subnets subnet-033a854d318ae79af subnet-0eae129b47376bd06
+ --scaling-config minSize=1,maxSize=2,desiredSize=1  \
+ --instance-types t2.medium \
+ --region us-east-2
+
+arn:aws:iam::<ACCOUNT_ID>:role/eksClusterRole
+
+
+aws eks create-nodegroup --cluster-name <your-cluster-name> --nodegroup-name <your-nodegroup-name> --subnets <subnet-1> <subnet-2> --node-role <node-instance-role-arn> --scaling-config minSize=1,maxSize=3,desiredSize=2 --region <your-region>
+
+
+
+kube-proxy - v1.31.0-eksbuild.2
+coreDNS - v1.11.3-eksbuild.1
+Amazon VPC CNI - v1.18.3-eksbuild.2 (amazon-vpc-cni-k8s)
+Amazon EKS Pod Identity Agent - v1.3.2-eksbuild.2
