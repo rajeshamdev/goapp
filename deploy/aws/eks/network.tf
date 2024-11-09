@@ -84,21 +84,21 @@ resource "aws_security_group" "app_security_group" {
   }
 }
 
-# add the rule that accepts any http traffic
-resource "aws_vpc_security_group_ingress_rule" "allow_http" {
-  security_group_id = aws_security_group.app_security_group.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 80
-  to_port           = 80
-  ip_protocol       = "tcp"
-}
-
 # add the rule that accepts any https traffic
 resource "aws_vpc_security_group_ingress_rule" "allow_https" {
   security_group_id = aws_security_group.app_security_group.id
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 443
   to_port           = 443
+  ip_protocol       = "tcp"
+}
+
+# add the rule that accepts any https traffic
+resource "aws_vpc_security_group_ingress_rule" "allow_k8_kubelet" {
+  security_group_id = aws_security_group.app_security_group.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 10250
+  to_port           = 10250
   ip_protocol       = "tcp"
 }
 
@@ -126,14 +126,6 @@ resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
 # But, connections initiated by resources in security group requires
 # outbound rule in case they want to communicate outside
 # (for example git clone or wget etc).
-
-resource "aws_vpc_security_group_egress_rule" "allow_http" {
-  security_group_id = aws_security_group.app_security_group.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 80
-  to_port           = 80
-  ip_protocol       = "tcp"
-}
 
 resource "aws_vpc_security_group_egress_rule" "allow_https" {
   security_group_id = aws_security_group.app_security_group.id

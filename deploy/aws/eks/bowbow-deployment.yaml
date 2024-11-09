@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bowbow-backend-deployment
+  labels:
+    app: goapp-backend
+
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: goapp-backend
+  template:
+    metadata:
+      name: goapp-backend-pod
+      labels:
+        app: goapp-backend
+    spec:
+      containers:
+      - name: goapp-backend-container
+        image: <AWS_ACCOUNT>.dkr.ecr.us-east-2.amazonaws.com/rajeshamdev:goapp-v1.0
+        ports:
+        - containerPort: 8080
+        env:
+        - name: GCP_APIKEY
+          value: <>

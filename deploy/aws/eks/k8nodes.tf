@@ -33,6 +33,12 @@ resource "aws_iam_role_policy_attachment" "eks_ec2_container_registry_policy" {
   role       = aws_iam_role.eks_node_group_role.name
 }
 
+resource "aws_launch_template" "k8nodes_launch_template" {
+  name = "k8nodes-compute-launch-template"
+  vpc_security_group_ids = [aws_security_group.app_security_group.id]
+  key_name = aws_key_pair.k8node_group_keys.key_name
+}
+
 # EKS Node Group
 resource "aws_eks_node_group" "k8nodes" {
   cluster_name    = aws_eks_cluster.my_cluster.name
@@ -40,7 +46,10 @@ resource "aws_eks_node_group" "k8nodes" {
   node_role_arn   = aws_iam_role.eks_node_group_role.arn
 
   subnet_ids = aws_subnet.public_subnet[*].id
-
+  launch_template {
+    id      = aws_launch_template.k8nodes_launch_template.id
+    version = "$Latest"
+  }
   scaling_config {
     desired_size = 2
     max_size     = 2
@@ -49,10 +58,6 @@ resource "aws_eks_node_group" "k8nodes" {
 
   instance_types = [var.aws_k8node_ec2_type]
   ami_type       = "AL2_x86_64"
-
-  remote_access {
-     ec2_ssh_key = aws_key_pair.k8node_group_keys.key_name
-  }
 
   # Tags for the EC2 instances
   tags = {
