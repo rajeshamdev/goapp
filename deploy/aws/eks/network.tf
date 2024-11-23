@@ -75,50 +75,93 @@ resource "aws_route_table_association" "rt_association" {
 #
 # create security group
 resource "aws_security_group" "app_security_group" {
-  name        = "Web Security Group"
-  description = "Allow http and ssh access"
+  name        = "AWS EKS Security Group"
+  description = "Security group for goapp, Prometheus, Grafana and Loki"
   vpc_id      = aws_vpc.ohio_vpc.id
 
   tags = {
-    Name = "Web-Security-Group"
+    Name = "EKS-Security-Group"
   }
 }
 
-# add the rule that accepts any https traffic
-resource "aws_vpc_security_group_ingress_rule" "allow_https" {
+# Allow http traffic
+resource "aws_vpc_security_group_ingress_rule" "http" {
   security_group_id = aws_security_group.app_security_group.id
+  ip_protocol       = "tcp"
+  from_port         = 80
+  to_port           = 80
   cidr_ipv4         = "0.0.0.0/0"
+  description       = "allow http access"
+}
+
+# Allow https traffic
+resource "aws_vpc_security_group_ingress_rule" "https" {
+  security_group_id = aws_security_group.app_security_group.id
+  ip_protocol       = "tcp"
   from_port         = 443
   to_port           = 443
-  ip_protocol       = "tcp"
+  cidr_ipv4         = "0.0.0.0/0"
+  description       = "allow https access"
 }
 
-# add the rule that accepts any https traffic
-resource "aws_vpc_security_group_ingress_rule" "allow_k8_kubelet" {
+# allow kubelet metrics (port 10250)
+resource "aws_vpc_security_group_ingress_rule" "kubelet_metrics" {
   security_group_id = aws_security_group.app_security_group.id
-  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "tcp"
   from_port         = 10250
   to_port           = 10250
-  ip_protocol       = "tcp"
+  cidr_ipv4         = "0.0.0.0/0"
+  description       = "allow access to kubelet metrics endpoint"
 }
 
-# add the rule that accepts any http traffic
-resource "aws_vpc_security_group_ingress_rule" "allow_8080" {
+# add the rule that accepts traffic to bowbow-app
+resource "aws_vpc_security_group_ingress_rule" "goapp" {
   security_group_id = aws_security_group.app_security_group.id
-  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "tcp"
   from_port         = 8080
   to_port           = 8080
-  ip_protocol       = "tcp"
+  cidr_ipv4         = "0.0.0.0/0"
+  description       = "allow access to goapp endpoint"
 }
 
+
+# Allow prometheus UI
+resource "aws_vpc_security_group_ingress_rule" "prometheus_ui" {
+  security_group_id = aws_security_group.app_security_group.id
+  ip_protocol       = "tcp"
+  from_port         = 9090
+  to_port           = 9090
+  cidr_ipv4         = "0.0.0.0/0"
+  description      = "allow access to Prometheus web UI"
+}
+
+# Allow Grafana UI
+resource "aws_vpc_security_group_ingress_rule" "grafana_ui" {
+  security_group_id = aws_security_group.app_security_group.id
+  ip_protocol       = "tcp"
+  from_port         = 3000
+  to_port           = 3000
+  cidr_ipv4         = "0.0.0.0/0"
+  description      = "Allow access to Grafana web UI"
+}
+
+# Allow Loki API
+resource "aws_vpc_security_group_ingress_rule" "loki_api" {
+  security_group_id = aws_security_group.app_security_group.id
+  ip_protocol       = "tcp"
+  from_port         = 3100
+  to_port           = 3100
+  cidr_ipv4         = "0.0.0.0/0"
+  description      = "Allow access to Loki API"
+}
 
 # add the rule that accepts ssh connections
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
   security_group_id = aws_security_group.app_security_group.id
-  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "tcp"
   from_port         = 22
   to_port           = 22
-  ip_protocol       = "tcp"
+  cidr_ipv4         = "0.0.0.0/0"
 }
 
 # NOTE: inbound connections to security group are stateful
@@ -129,8 +172,8 @@ resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
 
 resource "aws_vpc_security_group_egress_rule" "allow_https" {
   security_group_id = aws_security_group.app_security_group.id
-  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "tcp"
   from_port         = 443
   to_port           = 443
-  ip_protocol       = "tcp"
+  cidr_ipv4         = "0.0.0.0/0"
 }
